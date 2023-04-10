@@ -142,8 +142,8 @@ u16 getFaceLight(MapNode n, MapNode n2, const NodeDefManager *ndef)
 	Calculate smooth lighting at the XYZ- corner of p.
 	Both light banks
 */
-static u16 getSmoothLightCombined(const v3s16 &p,
-	const std::array<v3s16,8> &dirs, MeshMakeData *data)
+static u16 getSmoothLightCombined(
+		const v3s16 &p, const std::array<v3s16, 8> &dirs, MeshMakeData *data)
 {
 	const NodeDefManager *ndef = data->m_client->ndef();
 
@@ -154,7 +154,7 @@ static u16 getSmoothLightCombined(const v3s16 &p,
 	u16 light_night = 0;
 	bool direct_sunlight = false;
 
-	auto add_node = [&] (u8 i, bool obstructed = false) -> bool {
+	auto add_node = [&](u8 i, bool obstructed = false) -> bool {
 		if (obstructed) {
 			ambient_occlusion++;
 			return false;
@@ -171,8 +171,15 @@ static u16 getSmoothLightCombined(const v3s16 &p,
 			u8 light_level_night = n.getLight(LIGHTBANK_NIGHT, f.getLightingFlags());
 			if (light_level_day == LIGHT_SUN)
 				direct_sunlight = true;
-			light_day += decode_light(light_level_day);
-			light_night += decode_light(light_level_night);
+			float light_factor = 1.0;
+			if (true) {//f.light_propagates) {
+				// Calculate angle between surface normal and light direction
+				float angle = fabs(v3s16(0).dotProduct(dirs[i]));
+				// Use angle to determine how much the light should contribute
+				light_factor = (1.0 + angle) / 2.0;
+			}
+			light_day += decode_light(light_level_day) * light_factor;
+			light_night += decode_light(light_level_night) * light_factor;
 			light_count++;
 		} else {
 			ambient_occlusion++;
@@ -180,7 +187,7 @@ static u16 getSmoothLightCombined(const v3s16 &p,
 		return f.light_propagates;
 	};
 
-	bool obstructed[4] = { true, true, true, true };
+	bool obstructed[4] = {true, true, true, true};
 	add_node(0);
 	bool opaque1 = !add_node(1);
 	bool opaque2 = !add_node(2);

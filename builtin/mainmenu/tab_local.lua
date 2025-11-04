@@ -204,14 +204,16 @@ local function get_formspec(tabview, name, tabdata)
 			y = y + yo
 		end
 	end
-
+    -- TODO: CHECKMARK
 	retval = retval ..
 			"container[5.25,4.875]" ..
-			"button[6.65,0;3.225,0.8;world_create;".. fgettext("New") .. "]"
+			"button[7.9,0;1.975,0.8;world_create;".. fgettext("New") .. "]" ..
+			"button[5.925,0;1.975,0.8;world_import;".. fgettext("Import") .. "]"
 	if world then
 		retval = retval ..
-				"button[0,0;3.225,0.8;world_delete;".. fgettext("Delete") .. "]" ..
-				"button[3.325,0;3.225,0.8;world_configure;".. fgettext("Select Mods") .. "]"
+				"button[0,0;1.975,0.8;world_delete;".. fgettext("Delete") .. "]" ..
+				"button[1.975,0;1.975,0.8;world_configure;".. fgettext("Select Mods") .. "]" ..
+				"button[3.95,0;1.975,0.8;world_export;".. fgettext("Export") .. "]"
 	end
 	retval = retval ..
 			"container_end[]" ..
@@ -425,6 +427,23 @@ local function main_button_handler(this, fields, name, tabdata)
 
 		return true
 	end
+
+    if fields["world_export"] ~= nil then
+        local selected = core.get_textlist_index("sp_worlds")
+        if selected ~= nil and
+            selected <= menudata.worldlist:size() then
+            local world = menudata.worldlist:get_list()[selected]
+            core.log("export goes here")
+        end
+
+        return true
+    end
+
+    if fields["world_import"] ~= nil then
+        core.log("import goes here")
+
+        return true
+    end
 
 	if fields["world_configure"] ~= nil then
 		local selected = core.get_textlist_index("sp_worlds")

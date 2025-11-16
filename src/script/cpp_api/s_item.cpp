@@ -252,10 +252,10 @@ bool ScriptApiItem::getItemCallback(const char *name, const char *callbackname,
 	return false;
 }
 
-void ScriptApiItem::pushPointedThing(const PointedThing &pointed, bool hitpoint)
+void ScriptApiItem::pushPointedThing(const PointedThing &pointed)
 {
 	lua_State* L = getStack();
 
-	push_pointed_thing(L, pointed, false, hitpoint);
+	push_pointed_thing(L, pointed, false);
 }
 

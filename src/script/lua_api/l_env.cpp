@@ -76,7 +76,7 @@ int LuaRaycast::l_next(lua_State *L)
 	if (pointed.type == POINTEDTHING_NOTHING)
 		lua_pushnil(L);
 	else
-		push_pointed_thing(L, pointed, csm, true);
+		push_pointed_thing(L, pointed, csm);
 
 	return 1;
 }

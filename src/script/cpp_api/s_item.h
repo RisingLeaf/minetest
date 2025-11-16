@@ -49,6 +49,6 @@ protected:
 	 * Pushes a `pointed_thing` tabe to the stack.
 	 * \param hitpoint If true, the exact pointing location is also pushed
 	 */
-	void pushPointedThing(const PointedThing &pointed, bool hitpoint = false);
+	void pushPointedThing(const PointedThing &pointed, bool hitpoint = true);
 
 };

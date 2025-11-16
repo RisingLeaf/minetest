@@ -47,6 +47,7 @@ void PointedThing::serialize(std::ostream &os) const
 		writeU16(os, object_id);
 		break;
 	}
+	writeV3F32(os, intersection_point);
 }
 
 void PointedThing::deSerialize(std::istream &is)
@@ -68,6 +69,7 @@ void PointedThing::deSerialize(std::istream &is)
 	default:
 		throw SerializationError("unsupported PointedThingType");
 	}
+	intersection_point = readV3F32(is);
 }
 
 bool PointedThing::operator==(const PointedThing &pt2) const
